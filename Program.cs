@@ -5,7 +5,6 @@
 int [] credits = {0,0};
 
 //Main
-//using System.Runtime.InteropServices;
 int userInput = GetMenuChoice(credits);
 while (userInput != 4 && userInput!=5){
     Route(userInput, credits);
