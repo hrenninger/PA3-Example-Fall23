@@ -1,5 +1,5 @@
 ﻿//PA3 Example
-
+//THIS IS A CHANGE
 //Initialize variables
 
 int [] credits = {0,0};
