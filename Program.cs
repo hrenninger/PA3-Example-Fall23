@@ -304,11 +304,11 @@ static void Wheel(int[] credits){
     Random rnd = new Random();
     int number = rnd.Next(5);
     switch(number){
-        case 1:
+        case 0:
             wheelCredits++;
             Console.WriteLine("You won one credit hour!");
             break;
-        case 2:
+        case 1:
             int random = rnd.Next(2);
             if (random == 0){
                 wheelCredits+=2;
@@ -319,11 +319,11 @@ static void Wheel(int[] credits){
                 Console.WriteLine("You lost two credit hours!");
             }
             break;
-        case 3:
+        case 2:
             wheelCredits --;
             Console.WriteLine("You lose one credit hour!");
             break;
-        case 4:
+        case 3:
             wheelCredits =0;
             credits[0] = 0;
             Console.WriteLine("You lost all of your credits!");

@@ -1,0 +1,15 @@
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\bin\Debug\net7.0\PA3-Example-Fall23.exe
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\bin\Debug\net7.0\PA3-Example-Fall23.deps.json
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\bin\Debug\net7.0\PA3-Example-Fall23.runtimeconfig.json
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\bin\Debug\net7.0\PA3-Example-Fall23.dll
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\bin\Debug\net7.0\PA3-Example-Fall23.pdb
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\obj\Debug\net7.0\PA3-Example-Fall23.csproj.AssemblyReference.cache
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\obj\Debug\net7.0\PA3-Example-Fall23.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\obj\Debug\net7.0\PA3-Example-Fall23.AssemblyInfoInputs.cache
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\obj\Debug\net7.0\PA3-Example-Fall23.AssemblyInfo.cs
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\obj\Debug\net7.0\PA3-Example-Fall23.csproj.CoreCompileInputs.cache
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\obj\Debug\net7.0\PA3-Example-Fall23.dll
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\obj\Debug\net7.0\refint\PA3-Example-Fall23.dll
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\obj\Debug\net7.0\PA3-Example-Fall23.pdb
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\obj\Debug\net7.0\PA3-Example-Fall23.genruntimeconfig.cache
+C:\Users\hrenn\Stuff\mis221-ta\PA3-Example-Fall23\obj\Debug\net7.0\ref\PA3-Example-Fall23.dll
