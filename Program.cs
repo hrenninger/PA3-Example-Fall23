@@ -2,6 +2,8 @@
 //THIS IS A CHANGE
 //Initialize variables
 
+using Microsoft.Win32.SafeHandles;
+
 int [] credits = {0,0};
 
 //Main
@@ -11,7 +13,8 @@ while (userInput != 4 && userInput!=5){
     userInput = GetMenuChoice(credits);
 }
 if (userInput ==4){
-    Console.WriteLine("Thanks for playing!");
+    int hours = credits[0] + credits[1];
+    Console.WriteLine($"Thanks for playing! You earned a total of {hours} hours.");
 }
 else{
     EndingCredits();
@@ -80,26 +83,24 @@ static void PauseAction(){
 
 //Password Cracker
 static void PasswordCracker(int[] credits){
-    PasswordInstructions();
-    int userInput = GetUserChoice();
-    while (!PasswordCreditLimit(credits)&& userInput == 1){ //check if user has received three points from password cracker
-        Password(credits);
-        PasswordInstructions();
-        userInput = GetUserChoice();
-    }
-    if (PasswordCreditLimit(credits)){
-        Console.WriteLine("You have received 3 credits from Password Cracker!");
-        PauseAction();
+    if (!PasswordCreditLimit(credits)){
+        int userInput = 1;
+        while (!PasswordCreditLimit(credits)&& userInput == 1){ //check if user has received three points from password cracker
+            PasswordInstructions();
+            userInput = GetUserChoice();
+            if (userInput == 1){
+                Password(credits);
+            }
+        }
     }
 }
 
 static void PasswordInstructions(){
     Console.Clear();
     Console.WriteLine("In this training, the computer will generate a random password");
-    Console.WriteLine("\tPossible passwords: Spy, Hacker, Herbert, Penguin, Secret");
     Console.WriteLine("You will have 10 tries to guess the password.");
-    Console.WriteLine("If correct: \n\tyou will gain 1 credit hour!\nIf incorrect:");
-    Console.WriteLine("\tyou will lose 1 credit hour! \nPress 1 to play, 0 to exit.");
+    Console.WriteLine("If correct: \tyou will gain 1 credit hour!\nIf incorrect: \tyou will lose 1 credit hour!");
+    Console.WriteLine("\nPress 1 to play, 0 to exit.");
 }
 
 static int GetUserChoice(){
@@ -116,6 +117,8 @@ static int GetUserChoice(){
 static bool PasswordCreditLimit(int[] credits){  //returns if user has met game credit hour limit
     if (credits[0] >= 3){
         credits[0] = 3;
+        Console.WriteLine("You have received 3 credit hours from Password Cracker!");
+        PauseAction();
         return true;
     }
     else {
@@ -125,7 +128,6 @@ static bool PasswordCreditLimit(int[] credits){  //returns if user has met game 
 
 static void Password(int[] credits){
     int passwordCredits = credits[0];
-    Console.Clear();
     string word = GetRandomWord();
     char[] displayWord = SetDisplayWord(word);
     int missed = 0;
@@ -176,28 +178,35 @@ static void CheckChoice(char[] displayWord, string word, ref int missed,
                                 ref string guessed, string guessedWord){
     int index = 0;
     char[] wordArray = word.ToCharArray();
+    if (guessedWord.Length< wordArray.Length){
+        int fill = wordArray.Length - guessedWord.Length;
+        string buffer = "";
+        for (int i = 0; i < fill; i++){
+            buffer += ' ';
+        }
+        guessedWord += buffer; 
+    }
     for(int i = 0; i < wordArray.Length; i++){
-        for(int j =0; j< guessedWord.Length; j++){
-            if (guessedWord[j] == wordArray[i]){
-                index = 1;
-                displayWord[i] = guessedWord[j];
+        if (guessedWord[i] == wordArray[i]){
+            index = 1;
+            displayWord[i] = guessedWord[i];
+        }
+        else{
+            if (guessed == "No Letters Guessed Yet" ){
+                guessed = guessedWord[i].ToString();
             }
-            else{
-                if (guessed == "No Letters Guessed Yet" ){
-                    guessed = guessedWord[j].ToString();
-                }
-                else if (NotInGuessed(guessed, guessedWord[j])){ //makes sure guessed does not have duplicates
-                    guessed += " " + guessedWord[j].ToString();
-                            
-                }
+            else if (NotInGuessed(guessed, guessedWord[i])){ //makes sure guessed does not have duplicates
+                guessed += " " + guessedWord[i].ToString();
+                        
             }
         }
+        
     }
     missed++;
     
     if (index == 0){
         missed++;
-        Console.WriteLine("Word had no matching letters.");
+        Console.WriteLine("Word had no exact match letters.");
         PauseAction();
     }
 
@@ -231,6 +240,7 @@ static bool KeepGoing(char[] displayWord, int missed){
 }
 
 static void ShowBoard(char[] displayWord, int missed, string guessed){
+    Console.Clear();
     Console.WriteLine("Word to guess: ");
     for (int i = 0; i < displayWord.Length; i++)
     {
@@ -268,17 +278,17 @@ static string GetRandomWord(){
 
 //Spin the Wheel
 static void SpinWheel(int[] credits){
-    WheelInstructions();
-    int userInput = GetUserChoice();
-    while (!WheelCreditLimit(credits)&& userInput == 1){ //check if user has received three points from password cracker
-        Wheel(credits);
-        WheelInstructions();
-        userInput = GetUserChoice();
+    if(!WheelCreditLimit(credits)){
+        int userInput = 1;
+        while (!WheelCreditLimit(credits)&& userInput == 1){ //check if user has received three points from password cracker
+            WheelInstructions();
+            userInput = GetUserChoice();
+            if (userInput == 1){
+                Wheel(credits);
+            }
+        }
     }
-    if(WheelCreditLimit(credits)){
-        Console.WriteLine("You have received 3 credits from Spin the Wheel!");
-        PauseAction();
-    }
+
 }
 
 static void WheelInstructions(){
@@ -292,6 +302,8 @@ static void WheelInstructions(){
 static bool WheelCreditLimit(int[] credits){
     if (credits[1] >= 3){
         credits[1] = 3;
+        Console.WriteLine("You have received 3 credit hours from Spin the Wheel!");
+        PauseAction();
         return true;
     }
     else {
@@ -324,16 +336,18 @@ static void Wheel(int[] credits){
             Console.WriteLine("You lose one credit hour!");
             break;
         case 3:
-            wheelCredits =0;
+            if (wheelCredits <= 0){
+                wheelCredits -= 2;
+            }
+            else{
+                wheelCredits = 0;
+            }
             credits[0] = 0;
             Console.WriteLine("You lost all of your credits!");
             break;
         default: 
             Console.WriteLine("You landed on nothing!");
             break;
-    }
-    if(wheelCredits<0){
-        wheelCredits = 0;
     }
     credits[1] = wheelCredits;
     PauseAction();
