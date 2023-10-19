@@ -129,15 +129,16 @@ static void Password(int[] credits){
     string word = GetRandomWord();
     char[] displayWord = SetDisplayWord(word);
     int missed = 0;
-    string guessed = "No Letters Guessed Yet";
+    string[] guesses = new string[100];
+    int guessCount = 0;
     string guessedWord = "";
 
     while (KeepGoing(displayWord, missed))
     {
-        ShowBoard(displayWord, missed, guessed);
+        ShowBoard(displayWord, missed, guesses, guessCount);
         Console.WriteLine();
-        guessedWord = Console.ReadLine().ToUpper();
-        CheckChoice(displayWord, word, ref missed, ref guessed, guessedWord);
+        guessedWord = GetPasswordGuess(word);
+        CheckChoice(displayWord, word, ref missed, guesses, ref guessCount, guessedWord);
         if(!KeepGoing(displayWord, missed)&&missed!=11){
             PasswordWin(ref guessedWord, word); //make sure user is entering in the actual password, not just letters
         }
@@ -161,6 +162,16 @@ static void Password(int[] credits){
     credits[0] = passwordCredits;
 }
 
+static string GetPasswordGuess(string word){
+    string userInput = Console.ReadLine();
+
+    while(userInput.Length != word.Length){
+        System.Console.WriteLine($"You must guess a word that is {word.Length} letters long!");
+        userInput = Console.ReadLine();
+    }
+    return userInput.ToUpper();
+}
+
 static void PasswordWin(ref string guessedWord, string word){
     while(guessedWord.ToUpper() != word){
         Console.WriteLine("Please enter the password spelled correctly (Enter ! for help):");
@@ -173,46 +184,55 @@ static void PasswordWin(ref string guessedWord, string word){
 }
 
 static void CheckChoice(char[] displayWord, string word, ref int missed,
-                                ref string guessed, string guessedWord){
-    int index = 0;
-    char[] wordArray = word.ToCharArray();
-    for(int i = 0; i < wordArray.Length; i++){
-        for(int j =0; j< guessedWord.Length; j++){
-            if (guessedWord[j] == wordArray[i]){
-                index = 1;
-                displayWord[i] = guessedWord[j];
-            }
-            else{
-                if (guessed == "No Letters Guessed Yet" ){
-                    guessed = guessedWord[j].ToString();
-                }
-                else if (NotInGuessed(guessed, guessedWord[j])){ //makes sure guessed does not have duplicates
-                    guessed += " " + guessedWord[j].ToString();
-                            
-                }
-            }
-        }
-    }
-    missed++;
+                                string[] guesses, ref int guessCount, string guessedWord){
     
-    if (index == 0){
-        missed++;
-        Console.WriteLine("Word had no matching letters.");
-        PauseAction();
+    // If word has been guessed, then inform user
+    if(InGuessList(guessedWord, guesses, guessCount)){
+        System.Console.WriteLine($"{guessedWord} has already been guessed");  
+    }
+    // Otherwise, continue checking for matches
+    else{
+
+        bool isCorrectGuess = false;
+        char[] wordArray = word.ToCharArray();
+        
+        // Looks through actual word and guessed word searching
+        // for matches. If one is found, then update displayWord at
+        // that index and note that a match was found 
+        for(int i = 0; i < wordArray.Length; i++){
+            if(guessedWord[i] == wordArray[i]){
+                displayWord[i] = guessedWord[i];
+                isCorrectGuess = true;
+            }
+
+        }
+
+        // If a match was not found, then inform user
+        if(!isCorrectGuess){
+            missed++;
+            Console.WriteLine("Word had no matching letters.");
+            PauseAction();
+        }
+
+        // Add word to guessed array and increase count
+        guesses[guessCount] = guessedWord;
+        guessCount++;
+
     }
 
     Console.Clear();
-    
 }
 
-static bool NotInGuessed(string guessed, char incorrectGuess){
-    char[] guess = guessed.ToCharArray();
-    for (int i=0; i < guessed.Length; i++){
-        if (guess[i] == incorrectGuess){
-            return false;
+// Checks to see if word is found in list of guesses
+static bool InGuessList(string guessedWord, string[] guesses, int guessCount){
+    for(int i = 0; i < guessCount; i++){
+        if(guessedWord == guesses[i]){
+            // Returns true to show word has been guessed
+            return true;
         }
     }
-    return true;
+    // Returns false to show word has not been guessed
+    return false;
 }
 
 static bool KeepGoing(char[] displayWord, int missed){
@@ -230,18 +250,25 @@ static bool KeepGoing(char[] displayWord, int missed){
     else return false;
 }
 
-static void ShowBoard(char[] displayWord, int missed, string guessed){
+static void ShowBoard(char[] displayWord, int missed, string[] guesses, int guessCount){
     Console.WriteLine("Word to guess: ");
     for (int i = 0; i < displayWord.Length; i++)
     {
         Console.Write(displayWord[i]);
     }
 
-    Console.WriteLine();
-    Console.WriteLine("Letters guessed: " + guessed);
+    DisplayGuesses(guesses, guessCount);
 
     Console.WriteLine("Current times guessed: " + missed);
 
+}
+
+static void DisplayGuesses(string[] guesses, int guessCount){
+    System.Console.Write("\nWords Guessed: ");
+    for(int i = 0; i < guessCount; i++){
+        System.Console.Write(guesses[i] + ", ");
+    }
+    System.Console.WriteLine();
 }
 
 static char[] SetDisplayWord(string word){
@@ -325,7 +352,6 @@ static void Wheel(int[] credits){
             break;
         case 4:
             wheelCredits =0;
-            credits[0] = 0;
             Console.WriteLine("You lost all of your credits!");
             break;
         default: 
