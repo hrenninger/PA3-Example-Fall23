@@ -84,13 +84,12 @@ static void PauseAction(){
 //Password Cracker
 static void PasswordCracker(int[] credits){
     if (!PasswordCreditLimit(credits)){
-        int userInput = 1;
-        while (!PasswordCreditLimit(credits)&& userInput == 1){ //check if user has received three points from password cracker
+        PasswordInstructions();
+        int userInput = GetUserChoice();
+        while (!PasswordCreditLimit(credits)&& userInput != 0){ //check if user has received three points from password cracker
+            Password(credits);
             PasswordInstructions();
             userInput = GetUserChoice();
-            if (userInput == 1){
-                Password(credits);
-            }
         }
     }
 }
@@ -279,13 +278,12 @@ static string GetRandomWord(){
 //Spin the Wheel
 static void SpinWheel(int[] credits){
     if(!WheelCreditLimit(credits)){
-        int userInput = 1;
-        while (!WheelCreditLimit(credits)&& userInput == 1){ //check if user has received three points from password cracker
+        WheelInstructions();
+        int userInput = GetUserChoice();
+        while (!WheelCreditLimit(credits)&& userInput != 0){ //check if user has received three points from password cracker
+            Wheel(credits);
             WheelInstructions();
             userInput = GetUserChoice();
-            if (userInput == 1){
-                Wheel(credits);
-            }
         }
     }
 
@@ -342,7 +340,6 @@ static void Wheel(int[] credits){
             else{
                 wheelCredits = 0;
             }
-            credits[0] = 0;
             Console.WriteLine("You lost all of your credits!");
             break;
         default: 
