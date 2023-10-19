@@ -1,8 +1,5 @@
 ﻿//PA3 Example
-//THIS IS A CHANGE
 //Initialize variables
-
-using Microsoft.Win32.SafeHandles;
 
 int [] credits = {0,0};
 
@@ -194,25 +191,32 @@ static void PasswordWin(ref string guessedWord, string word){
 
 static void CheckChoice(char[] displayWord, string word, ref int missed,
                                 string[] guesses, ref int guessCount, string guessedWord){
-
+    // If word has been guessed, then inform user
     if(InGuessList(guessedWord, guesses, guessCount)){
         Console.WriteLine($"{guessedWord} has already been guessed");
     }
+    // Otherwise, continue checking for matches
     else{
         bool isCorrectGuess = false;
         char[] wordArray = word.ToCharArray();
+
+        // Looks through actual word and guessed word searching
+        // for matches. If one is found, then update displayWord at
+        // that index and note that a match was found 
         for(int i = 0; i<wordArray.Length;i++){
             if(guessedWord[i]==wordArray[i]){
                 displayWord[i] = guessedWord[i];
                 isCorrectGuess = true;
             }
         }
+
+        // If a match was not found, then inform user
         if(!isCorrectGuess){
             missed++;
             Console.WriteLine("Word had no matching letters.");
             PauseAction();
         }
-
+        // Add word to guessed array and increase count
         guesses[guessCount] = guessedWord;
         guessCount++;
     }
@@ -222,13 +226,15 @@ static void CheckChoice(char[] displayWord, string word, ref int missed,
 }
 
 
-
+// Checks to see if word is found in list of guesses
 static bool InGuessList(string guessedWord, string[] guesses, int guessCount){
     for (int i=0; i < guessCount; i++){
         if (guessedWord == guesses[i]){
+        // Returns true to show word has been guessed
             return true;
         }
     }
+    // Returns false to show word has not been guessed
     return false;
 }
 
@@ -297,9 +303,19 @@ static void SpinWheel(int[] credits){
         int userInput = GetUserChoice();
         while (!WheelCreditLimit(credits)&& userInput != 0){ //check if user has received three points from password cracker
             Wheel(credits);
-            WheelInstructions();
-            userInput = GetUserChoice();
+            if(!WheelCreditLimit(credits)){
+                WheelInstructions();
+                userInput = GetUserChoice();
+            }
+            else{
+                Console.WriteLine("You have received 3 credit hours from Spin the Wheel!");
+                PauseAction();
+            }
         }
+    }
+    else{
+        Console.WriteLine("You have received 3 credit hours from Spin the Wheel!");
+        PauseAction();
     }
 
 }
@@ -315,8 +331,6 @@ static void WheelInstructions(){
 static bool WheelCreditLimit(int[] credits){
     if (credits[1] >= 3){
         credits[1] = 3;
-        Console.WriteLine("You have received 3 credit hours from Spin the Wheel!");
-        PauseAction();
         return true;
     }
     else {
